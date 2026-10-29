@@ -263,14 +263,16 @@ def initialize_skill_matcher():
         tuple: (nlp model, matcher, skills_db)
     """
     try:
-        # Load spaCy model (medium with word vectors)
+        model_name = os.getenv("CAREERVUE_SPACY_MODEL", "en_core_web_sm")
         try:
-            nlp = spacy.load("en_core_web_md")
-        except:
-            # If model not found, download it
+            nlp = spacy.load(model_name)
+        except OSError:
             import subprocess
-            subprocess.run(["python", "-m", "spacy", "download", "en_core_web_md"], check=True)
-            nlp = spacy.load("en_core_web_md")
+            subprocess.run(
+                ["python", "-m", "spacy", "download", model_name],
+                check=True,
+            )
+            nlp = spacy.load(model_name)
         
         # Load skills database
         skills_db = load_skills_database()

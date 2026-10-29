@@ -1,0 +1,3 @@
+# Optional local semantic matching. Install only when embeddings are enabled.
+-r requirements.txt
+sentence-transformers

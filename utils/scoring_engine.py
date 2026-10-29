@@ -227,21 +227,23 @@ def calculate_semantic_similarity(nlp, resume_text, jd_text, max_score=30):
         tuple: (score, details dict)
     """
     try:
-        # Check if nlp model has vectors
-        if not nlp.vocab.vectors.length:
-            return 0, {"error": "NLP model does not have word vectors"}
-            
-        doc_resume = nlp(resume_text)
-        doc_jd = nlp(jd_text)
-        
-        # Calculate cosine similarity
-        similarity = doc_resume.similarity(doc_jd)
+        vector_count = getattr(nlp.vocab.vectors, "n_vectors", 0)
+        if vector_count:
+            doc_resume = nlp(resume_text)
+            doc_jd = nlp(jd_text)
+            similarity = doc_resume.similarity(doc_jd)
+            method = "spaCy word vectors"
+        else:
+            vectorizer = TfidfVectorizer(stop_words="english", ngram_range=(1, 2))
+            matrix = vectorizer.fit_transform([resume_text, jd_text])
+            similarity = float((matrix[0] @ matrix[1].T).toarray()[0][0])
+            method = "TF-IDF cosine similarity fallback"
         
         score = similarity * max_score
         
         details = {
             "similarity_raw": round(similarity, 3),
-            "method": "spaCy en_core_web_md (300d vectors)"
+            "method": method,
         }
         
         return round(score, 1), details

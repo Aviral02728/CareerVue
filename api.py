@@ -157,6 +157,7 @@ def health() -> Dict[str, str]:
     return {
         "status": "ok",
         "models": "ready" if nlp is not None else "loading",
+        "spacy_model": os.getenv("CAREERVUE_SPACY_MODEL", "en_core_web_sm"),
         "embeddings": "enabled"
         if os.getenv("CAREERVUE_ENABLE_EMBEDDINGS", "false").lower()
         in {"1", "true", "yes"}
