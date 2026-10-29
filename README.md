@@ -1,4 +1,4 @@
-# CareerVue
+# 🎯 CareerVue
 
 > **See your career more clearly.**
 
