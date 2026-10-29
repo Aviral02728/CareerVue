@@ -1,0 +1,12 @@
+[
+  {
+    "name": "backend role",
+    "predicted_skills": ["Python", "FastAPI", "PostgreSQL"],
+    "expected_skills": ["Python", "FastAPI", "PostgreSQL"]
+  },
+  {
+    "name": "frontend role",
+    "predicted_skills": ["React", "TypeScript", "CSS"],
+    "expected_skills": ["React", "TypeScript", "CSS", "Testing"]
+  }
+]
