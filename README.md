@@ -1,4 +1,4 @@
-# 🎯 CareerVue
+# 🎯 CareerVue : Resume Analyzer + Linkedin Optimizer
 
 > <strong>See your career more clearly.</strong>
 
