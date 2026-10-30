@@ -1,4 +1,4 @@
-# 🎯 CareerVue
+# CareerVue
 
 > **See your career more clearly.**
 
@@ -12,17 +12,14 @@ CareerVue is a professional resume analysis and LinkedIn optimization platform. 
 
 ## ✨ What CareerVue does
 
-<table>
-<thead><tr><th>Area</th><th>What you get</th></tr></thead>
-<tbody>
-<tr><td>📄 Resume analyzer</td><td>Resume parsing, role comparison, skill coverage, score breakdown, and improvement actions</td></tr>
-<tr><td>🎯 Skill matching</td><td>Matched skills, missing skills, normalized aliases, and target-role fit</td></tr>
-<tr><td>📊 Visual insights</td><td>Resume strength bars, skill-coverage visualization, and optional evidence matching</td></tr>
-<tr><td>💼 LinkedIn optimizer</td><td>Headline, About section, keyword suggestions, and ATS feedback</td></tr>
-<tr><td>🔐 Accounts</td><td>Signup, login, protected analysis, and SQLite-backed saved reviews</td></tr>
-<tr><td>🗂️ Saved reviews</td><td>Review history with user-scoped deletion</td></tr>
-</tbody>
-</table>
+| Area | What you get |
+|---|---|
+| 📄 Resume analyzer | Resume parsing, role comparison, skill coverage, score breakdown, and improvement actions |
+| 🎯 Skill matching | Matched skills, missing skills, normalized aliases, and target-role fit |
+| 📊 Visual insights | Resume strength bars, skill-coverage visualization, and optional evidence matching |
+| 💼 LinkedIn optimizer | Headline, About section, keyword suggestions, and ATS feedback |
+| 🔐 Accounts | Signup, login, protected analysis, and SQLite-backed saved reviews |
+| 🗂️ Saved reviews | Review history with user-scoped deletion |
 
 ---
 
@@ -42,34 +39,26 @@ Generate LinkedIn content and save the review
 
 ### Resume review outputs
 
-<table>
-<thead><tr><th>Output</th><th>Description</th></tr></thead>
-<tbody>
-<tr><td><strong>Career fit</strong></td><td>How closely your skills match the target role</td></tr>
-<tr><td><strong>Resume strength</strong></td><td>Explainable score out of 100</td></tr>
-<tr><td><strong>Matched skills</strong></td><td>Capabilities already represented in your resume</td></tr>
-<tr><td><strong>Missing skills</strong></td><td>Role requirements that need attention</td></tr>
-<tr><td><strong>Improvement actions</strong></td><td>Practical changes based on measurable gaps</td></tr>
-<tr><td><strong>Skill coverage</strong></td><td>Visual comparison of matched and missing requirements</td></tr>
-</tbody>
-</table>
+- **Career fit** — how closely your skills match the target role
+- **Resume strength** — explainable score out of 100
+- **Matched skills** — capabilities already represented in your resume
+- **Missing skills** — role requirements that need attention
+- **Improvement actions** — practical changes based on measurable gaps
+- **Skill coverage** — visual comparison of matched and missing requirements
 
 ---
 
 ## 🛠️ Technology stack
 
-<table>
-<thead><tr><th>Layer</th><th>Technologies</th></tr></thead>
-<tbody>
-<tr><td>Frontend</td><td>React 18, TypeScript, Vite, Lucide React, CSS</td></tr>
-<tr><td>Backend</td><td>Python, FastAPI, Uvicorn, Pydantic</td></tr>
-<tr><td>NLP</td><td>spaCy, <code>en_core_web_md</code>, PhraseMatcher, regular expressions</td></tr>
-<tr><td>Scoring</td><td>scikit-learn TF-IDF, semantic similarity, weighted scoring</td></tr>
-<tr><td>Documents</td><td>PyPDF2, python-docx, python-multipart</td></tr>
-<tr><td>Storage</td><td>SQLite</td></tr>
-<tr><td>Optional ML</td><td>sentence-transformers and Cross-Encoder reranking</td></tr>
-</tbody>
-</table>
+| Layer | Technologies |
+|---|---|
+| Frontend | React 18, TypeScript, Vite, Lucide React, CSS |
+| Backend | Python, FastAPI, Uvicorn, Pydantic |
+| NLP | spaCy, `en_core_web_sm`, PhraseMatcher, regular expressions |
+| Scoring | scikit-learn TF-IDF, semantic similarity, weighted scoring |
+| Documents | PyPDF2, python-docx, python-multipart |
+| Storage | SQLite |
+| Optional ML | sentence-transformers and Cross-Encoder reranking |
 
 ---
 
@@ -125,15 +114,10 @@ CareerVue/
 
 ## ✅ Prerequisites
 
-<table>
-<thead><tr><th>Requirement</th><th>Version or details</th></tr></thead>
-<tbody>
-<tr><td>Python</td><td><strong>3.8+</strong></td></tr>
-<tr><td>Node.js</td><td><strong>18+</strong></td></tr>
-<tr><td>npm</td><td>Included with Node.js</td></tr>
-<tr><td>Resume</td><td>Text-based PDF, DOC, or DOCX file</td></tr>
-</tbody>
-</table>
+- Python **3.11.9**
+- Node.js **18+**
+- npm
+- A text-based PDF, DOC, or DOCX resume
 
 > Scanned image-only PDFs may require OCR before analysis.
 
@@ -150,8 +134,9 @@ python -m venv venv
 .\venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-python -m spacy download en_core_web_md
 ```
+
+For the optional spaCy-enhanced local setup, install `requirements-spacy.txt`.
 
 #### macOS/Linux
 
@@ -160,8 +145,9 @@ python3 -m venv venv
 source venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-python -m spacy download en_core_web_md
 ```
+
+For the optional spaCy-enhanced local setup, install `requirements-spacy.txt`.
 
 ### 2. Set up the frontend
 
@@ -192,15 +178,12 @@ npm run dev
 
 Open the website at **http://127.0.0.1:5173**.
 
-<table>
-<thead><tr><th>Resource</th><th>URL</th></tr></thead>
-<tbody>
-<tr><td>CareerVue website</td><td><code>http://127.0.0.1:5173</code></td></tr>
-<tr><td>API status</td><td><code>http://127.0.0.1:8000</code></td></tr>
-<tr><td>API health</td><td><code>http://127.0.0.1:8000/health</code></td></tr>
-<tr><td>Interactive API docs</td><td><code>http://127.0.0.1:8000/docs</code></td></tr>
-</tbody>
-</table>
+| Resource | URL |
+|---|---|
+| CareerVue website | `http://127.0.0.1:5173` |
+| API status | `http://127.0.0.1:8000` |
+| API health | `http://127.0.0.1:8000/health` |
+| Interactive API docs | `http://127.0.0.1:8000/docs` |
 
 ---
 
@@ -208,18 +191,15 @@ Open the website at **http://127.0.0.1:5173**.
 
 ### Backend variables
 
-<table>
-<thead><tr><th>Variable</th><th>Default</th><th>Purpose</th></tr></thead>
-<tbody>
-<tr><td><code>CAREERVUE_DATABASE</code></td><td><code>careervue.db</code></td><td>SQLite database location</td></tr>
-<tr><td><code>CAREERVUE_TOKEN_SECRET</code></td><td>Development value</td><td>Signs authentication tokens</td></tr>
-<tr><td><code>CAREERVUE_ALLOWED_ORIGINS</code></td><td>Localhost origins</td><td>Configures CORS</td></tr>
-<tr><td><code>CAREERVUE_ENABLE_EMBEDDINGS</code></td><td><code>false</code></td><td>Enables local semantic matching</td></tr>
-<tr><td><code>CAREERVUE_EMBEDDING_MODEL</code></td><td><code>all-MiniLM-L6-v2</code></td><td>Embedding model</td></tr>
-<tr><td><code>CAREERVUE_ENABLE_RERANKER</code></td><td><code>false</code></td><td>Enables optional Cross-Encoder reranking</td></tr>
-<tr><td><code>CAREERVUE_RERANKER_MODEL</code></td><td><code>cross-encoder/ms-marco-MiniLM-L-6-v2</code></td><td>Reranker model</td></tr>
-</tbody>
-</table>
+| Variable | Default | Purpose |
+|---|---|---|
+| `CAREERVUE_DATABASE` | `careervue.db` | SQLite database location |
+| `CAREERVUE_TOKEN_SECRET` | Development value | Signs authentication tokens |
+| `CAREERVUE_ALLOWED_ORIGINS` | Localhost origins | Configures CORS |
+| `CAREERVUE_ENABLE_EMBEDDINGS` | `false` | Enables local semantic matching |
+| `CAREERVUE_EMBEDDING_MODEL` | `all-MiniLM-L6-v2` | Embedding model |
+| `CAREERVUE_ENABLE_RERANKER` | `false` | Enables optional Cross-Encoder reranking |
+| `CAREERVUE_RERANKER_MODEL` | `cross-encoder/ms-marco-MiniLM-L-6-v2` | Reranker model |
 
 ### Frontend variable
 
@@ -233,17 +213,14 @@ For production, always replace the development token secret with a long, random 
 
 ## 📈 Scoring overview
 
-<table>
-<thead><tr><th>Component</th><th>Weight</th><th>Measures</th></tr></thead>
-<tbody>
-<tr><td>Semantic similarity</td><td>30</td><td>Contextual relationship between resume and role</td></tr>
-<tr><td>Skill alignment</td><td>25</td><td>Normalized overlap between resume and role skills</td></tr>
-<tr><td>Keyword density</td><td>20</td><td>Target-role keyword coverage using TF-IDF</td></tr>
-<tr><td>Experience relevance</td><td>15</td><td>Experience signals and action verbs</td></tr>
-<tr><td>Formatting</td><td>10</td><td>Presence of common resume sections</td></tr>
-<tr><td><strong>Total</strong></td><td><strong>100</strong></td><td>Explainable resume-strength score</td></tr>
-</tbody>
-</table>
+| Component | Weight | Measures |
+|---|---:|---|
+| Semantic similarity | 30 | Contextual relationship between resume and role |
+| Skill alignment | 25 | Normalized overlap between resume and role skills |
+| Keyword density | 20 | Target-role keyword coverage using TF-IDF |
+| Experience relevance | 15 | Experience signals and action verbs |
+| Formatting | 10 | Presence of common resume sections |
+| **Total** | **100** | Explainable resume-strength score |
 
 The score is a guidance tool, not an employment decision.
 
@@ -259,17 +236,12 @@ $env:CAREERVUE_EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 uvicorn api:app --reload --host 127.0.0.1 --port 8000
 ```
 
-This feature provides:
+This feature:
 
-<table>
-<thead><tr><th>Behavior</th><th>Details</th></tr></thead>
-<tbody>
-<tr><td>Execution</td><td>Runs locally with an open-source model</td></tr>
-<tr><td>Matching</td><td>Matches job requirements to relevant resume evidence</td></tr>
-<tr><td>Scoring</td><td>Does not change the default score</td></tr>
-<tr><td>Privacy</td><td>Does not send resume content to a hosted AI provider</td></tr>
-</tbody>
-</table>
+- Runs locally with an open-source model.
+- Matches job requirements to relevant resume evidence.
+- Does not change the default score.
+- Does not send resume content to a hosted AI provider.
 
 For optional reranking:
 
@@ -284,19 +256,16 @@ Reranking improves ambiguous matches but uses additional memory and CPU.
 
 ## 🔌 API routes
 
-<table>
-<thead><tr><th>Method</th><th>Route</th><th>Authentication</th><th>Purpose</th></tr></thead>
-<tbody>
-<tr><td><code>GET</code></td><td><code>/</code></td><td>No</td><td>API status</td></tr>
-<tr><td><code>GET</code></td><td><code>/health</code></td><td>No</td><td>Service and model readiness</td></tr>
-<tr><td><code>POST</code></td><td><code>/auth/register</code></td><td>No</td><td>Create an account</td></tr>
-<tr><td><code>POST</code></td><td><code>/auth/login</code></td><td>No</td><td>Sign in</td></tr>
-<tr><td><code>POST</code></td><td><code>/analyze</code></td><td>Yes</td><td>Analyze a resume against a role</td></tr>
-<tr><td><code>POST</code></td><td><code>/linkedin-optimize</code></td><td>Yes</td><td>Generate LinkedIn content</td></tr>
-<tr><td><code>GET</code></td><td><code>/analyses</code></td><td>Yes</td><td>List the user’s saved reviews</td></tr>
-<tr><td><code>DELETE</code></td><td><code>/analyses/{analysis_id}</code></td><td>Yes</td><td>Delete one owned review</td></tr>
-</tbody>
-</table>
+| Method | Route | Authentication | Purpose |
+|---|---|---|---|
+| `GET` | `/` | No | API status |
+| `GET` | `/health` | No | Service and model readiness |
+| `POST` | `/auth/register` | No | Create an account |
+| `POST` | `/auth/login` | No | Sign in |
+| `POST` | `/analyze` | Yes | Analyze a resume against a role |
+| `POST` | `/linkedin-optimize` | Yes | Generate LinkedIn content |
+| `GET` | `/analyses` | Yes | List the user’s saved reviews |
+| `DELETE` | `/analyses/{analysis_id}` | Yes | Delete one owned review |
 
 Protected routes use:
 
@@ -308,20 +277,34 @@ Authorization: Bearer <access_token>
 
 ## 🗃️ Data and security
 
-<table>
-<thead><tr><th>Area</th><th>Behavior</th></tr></thead>
-<tbody>
-<tr><td>Passwords</td><td>Stored as salted PBKDF2-HMAC-SHA256 hashes</td></tr>
-<tr><td>Access tokens</td><td>HMAC-SHA256 signed and expire after seven days</td></tr>
-<tr><td>Saved reviews</td><td>Filtered by authenticated user ID</td></tr>
-<tr><td>Review deletion</td><td>A user can delete only their own saved reviews</td></tr>
-<tr><td>Resume uploads</td><td>Limited to 5 MB</td></tr>
-<tr><td>Local storage</td><td>SQLite database is created automatically as <code>careervue.db</code></td></tr>
-<tr><td>Repository hygiene</td><td>Do not commit credentials, databases, uploaded files, or model caches</td></tr>
-</tbody>
-</table>
+- Passwords are stored as salted PBKDF2-HMAC-SHA256 hashes.
+- Access tokens are HMAC-SHA256 signed and expire after seven days.
+- Saved reviews are filtered by authenticated user ID.
+- A user can delete only their own saved reviews.
+- Resume uploads are limited to 5 MB.
+- Local SQLite storage is created automatically as `careervue.db`.
+- Do not commit credentials, databases, uploaded files, or model caches.
 
 For larger deployments, consider PostgreSQL, HTTPS, rate limiting, database migrations, and a formal data-retention policy.
+
+### Render deployment
+
+The repository includes `render.yaml` and `runtime.txt`. In Render, choose
+**New Blueprint** and select the repository. Render will use Python **3.11.9**,
+the included build command, start command, and `/health` check. Pinning this
+runtime prevents Python 3.14 from forcing spaCy to compile from source. For a
+manually created service,
+use:
+
+```text
+Build command: pip install --upgrade pip && pip install -r requirements.txt
+Start command: uvicorn api:app --host 0.0.0.0 --port $PORT
+Health check path: /health
+```
+
+Keep `sentence-transformers` out of the default deployment. It is listed in
+`requirements-ml.txt` because the embedding feature is optional and its large
+model dependencies can cause unnecessary build failures on small instances.
 
 ---
 
@@ -352,18 +335,15 @@ The benchmark reports precision, recall, and F1 for the starter skill-matching c
 
 ## 🐛 Troubleshooting
 
-<table>
-<thead><tr><th>Problem</th><th>Solution</th></tr></thead>
-<tbody>
-<tr><td>Login or signup fails</td><td>Confirm the API is running and check <code>VITE_API_URL</code></td></tr>
-<tr><td>CORS error</td><td>Add both frontend origins to <code>CAREERVUE_ALLOWED_ORIGINS</code></td></tr>
-<tr><td>spaCy model missing</td><td>Run <code>python -m spacy download en_core_web_md</code></td></tr>
-<tr><td>Empty PDF text</td><td>Use a text-based PDF or preprocess the file with OCR</td></tr>
-<tr><td>Saved review will not delete</td><td>Click the trash icon, then click <strong>Confirm</strong></td></tr>
-<tr><td>Embeddings unavailable</td><td>Install <code>sentence-transformers</code> or leave the feature disabled</td></tr>
-<tr><td>Frontend build fails</td><td>Run <code>npm install</code> inside <code>frontend/</code> and rebuild</td></tr>
-</tbody>
-</table>
+| Problem | Solution |
+|---|---|
+| Login or signup fails | Confirm the API is running and check `VITE_API_URL` |
+| CORS error | Add both frontend origins to `CAREERVUE_ALLOWED_ORIGINS` |
+| Optional spaCy model missing | Install `requirements-spacy.txt`, or use the built-in regex/TF-IDF fallback |
+| Empty PDF text | Use a text-based PDF or preprocess the file with OCR |
+| Saved review will not delete | Click the trash icon, then click **Confirm** |
+| Embeddings unavailable | Install `sentence-transformers` or leave the feature disabled |
+| Frontend build fails | Run `npm install` inside `frontend/` and rebuild |
 
 ---
 
@@ -386,7 +366,7 @@ VITE_API_URL=https://your-api.example.com
 
 ### Backend
 
-Use a Python-compatible host such as Railway, Render, or Fly.io:
+Use a persistent Python-compatible host such as Railway, Render, or Fly.io:
 
 ```bash
 uvicorn api:app --host 0.0.0.0 --port $PORT
@@ -394,30 +374,32 @@ uvicorn api:app --host 0.0.0.0 --port $PORT
 
 Configure a production token secret, database path, allowed frontend origins, and any optional local model settings.
 
+Vercel can host this FastAPI app as a Python Function, but it is not the
+recommended backend host for the current version. Vercel functions have
+ephemeral filesystems, so SQLite history is not durable, and request payload
+limits can conflict with resume uploads. Use Vercel for the frontend and a
+persistent backend host for the API unless you migrate storage to a managed
+database and object storage.
+
 ---
 
 ## 🔭 Future improvements
 
-<table>
-<thead><tr><th>Area</th><th>Planned improvement</th></tr></thead>
-<tbody>
-<tr><td>Document processing</td><td>OCR for scanned resumes</td></tr>
-<tr><td>Evaluation</td><td>Larger labeled NLP evaluation datasets</td></tr>
-<tr><td>Skill taxonomy</td><td>ESCO/O*NET skill taxonomy support</td></tr>
-<tr><td>Storage</td><td>PostgreSQL migrations</td></tr>
-<tr><td>Reporting</td><td>PDF and structured report exports</td></tr>
-<tr><td>Accessibility</td><td>Accessibility automation</td></tr>
-<tr><td>Performance</td><td>Background model loading</td></tr>
-<tr><td>Content quality</td><td>Grounded rewrite suggestions that cannot invent unsupported facts</td></tr>
-</tbody>
-</table>
+- OCR for scanned resumes
+- Larger labeled NLP evaluation datasets
+- ESCO/O*NET skill taxonomy support
+- PostgreSQL migrations
+- PDF and structured report exports
+- Accessibility automation
+- Background model loading
+- Grounded rewrite suggestions that cannot invent unsupported facts
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
+No license file is currently included. Add an appropriate license before public distribution.
 
 ---
 
-Made with love ❤️
+**CareerVue** — See your career more clearly.

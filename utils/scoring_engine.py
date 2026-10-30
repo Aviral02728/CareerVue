@@ -227,7 +227,7 @@ def calculate_semantic_similarity(nlp, resume_text, jd_text, max_score=30):
         tuple: (score, details dict)
     """
     try:
-        vector_count = getattr(nlp.vocab.vectors, "n_vectors", 0)
+        vector_count = getattr(getattr(getattr(nlp, "vocab", None), "vectors", None), "n_vectors", 0)
         if vector_count:
             doc_resume = nlp(resume_text)
             doc_jd = nlp(jd_text)

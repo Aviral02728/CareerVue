@@ -5,9 +5,14 @@ Extracts skills from text using spaCy and custom pattern matching
 
 import json
 import os
-import spacy
-from spacy.matcher import PhraseMatcher
 import re
+
+try:
+    import spacy
+    from spacy.matcher import PhraseMatcher
+except ImportError:
+    spacy = None
+    PhraseMatcher = None
 
 
 SKILL_ALIASES = {
@@ -60,7 +65,6 @@ def create_skill_matcher(nlp, skills_db):
     Returns:
         tuple: (PhraseMatcher, list of base skills)
     """
-    matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
     all_skills = []
     
     # Flatten all skills from all categories
@@ -69,6 +73,11 @@ def create_skill_matcher(nlp, skills_db):
     
     # Remove duplicates while preserving order
     base_skills = list(dict.fromkeys(all_skills))
+
+    if nlp is None or PhraseMatcher is None:
+        return RegexSkillMatcher(base_skills), base_skills
+
+    matcher = PhraseMatcher(nlp.vocab, attr="LOWER")
     
     # Add each base skill to the matcher with its own identity string to map variations back
     for skill in base_skills:
@@ -105,6 +114,43 @@ def create_skill_matcher(nlp, skills_db):
     return matcher, base_skills
 
 
+class RegexSkillMatcher:
+    """Small dependency-free matcher used when spaCy is unavailable."""
+
+    def __init__(self, skills):
+        self.skills = skills
+        self.patterns = []
+        for skill in skills:
+            variations = {skill}
+            lowered = skill.lower()
+            if ".js" in lowered:
+                variations.update(
+                    {
+                        skill.replace(".js", "JS"),
+                        skill.replace(".js", " js"),
+                    }
+                )
+            if " " in skill:
+                variations.update({skill.replace(" ", ""), skill.replace(" ", "-")})
+            if "-" in skill:
+                variations.update({skill.replace("-", ""), skill.replace("-", " ")})
+            escaped = sorted(
+                (re.escape(value) for value in variations if value.strip()),
+                key=len,
+                reverse=True,
+            )
+            self.patterns.append(
+                (skill, re.compile(r"(?<![A-Za-z0-9])(?:" + "|".join(escaped) + r")(?![A-Za-z0-9])", re.I))
+            )
+
+    def find_matches(self, text):
+        matches = []
+        for skill, pattern in self.patterns:
+            for match in pattern.finditer(text):
+                matches.append((skill, match.start(), match.end(), match.group(0)))
+        return sorted(matches, key=lambda item: (item[1], item[2] - item[1]))
+
+
 def extract_skills(text, matcher, nlp):
     """
     Extract unique skills from text
@@ -117,6 +163,9 @@ def extract_skills(text, matcher, nlp):
     Returns:
         list: List of unique extracted skills
     """
+    if isinstance(matcher, RegexSkillMatcher):
+        return sorted({match[0] for match in matcher.find_matches(text)})
+
     doc = nlp(text)
     matches = matcher(doc)
     
@@ -158,6 +207,12 @@ def extract_skills(text, matcher, nlp):
 
 def extract_skill_evidence(text, matcher, nlp):
     """Return matched skill names with source spans for explainable results."""
+    if isinstance(matcher, RegexSkillMatcher):
+        return [
+            {"skill": skill, "text": matched_text, "start": start, "end": end}
+            for skill, start, end, matched_text in matcher.find_matches(text)
+        ]
+
     doc = nlp(text)
     evidence = []
     seen = set()
@@ -264,15 +319,14 @@ def initialize_skill_matcher():
     """
     try:
         model_name = os.getenv("CAREERVUE_SPACY_MODEL", "en_core_web_sm")
+        if spacy is None:
+            skills_db = load_skills_database()
+            matcher, _ = create_skill_matcher(None, skills_db)
+            return None, matcher, skills_db
         try:
             nlp = spacy.load(model_name)
         except OSError:
-            import subprocess
-            subprocess.run(
-                ["python", "-m", "spacy", "download", model_name],
-                check=True,
-            )
-            nlp = spacy.load(model_name)
+            nlp = spacy.blank("en")
         
         # Load skills database
         skills_db = load_skills_database()
