@@ -24,7 +24,7 @@ function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [showSignup, setShowSignup] = useState(!localStorage.getItem("careervue_token"));
+  const [showSignup, setShowSignup] = useState(false);
   const [authMode, setAuthMode] = useState<"signup" | "login">("signup");
   const [activeView, setActiveView] = useState<"analyzer" | "linkedin" | "history">("analyzer");
   const [showPassword, setShowPassword] = useState(false);
@@ -43,6 +43,7 @@ function App() {
       setMessage("Passwords do not match.");
       return;
     }
+    setBusy(true);
     try {
       const response = await fetch(`${API_URL}/auth/${path}`, {
         method: "POST",
@@ -57,6 +58,8 @@ function App() {
       setShowSignup(false);
     } catch (error) {
       setMessage(error instanceof Error ? error.message : "Authentication failed.");
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -127,6 +130,29 @@ function App() {
     if (response.ok) setHistory(data.map((item: { id: number; result: Analysis }) => ({ ...item.result, saved_id: item.id })));
   };
 
+  const loadHistoryFromApi = async () => {
+    if (!token) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      const response = await fetch(`${API_URL}/analyses`, { headers: { Authorization: `Bearer ${token}` } });
+      const data = await response.json().catch(() => ({}));
+      if (response.status === 401) {
+        localStorage.removeItem("careervue_token");
+        setToken("");
+        setMessage("Your session expired. Please sign in again.");
+        return;
+      }
+      if (!response.ok) throw new Error(data.detail ?? "Could not load saved reviews.");
+      if (!Array.isArray(data)) throw new Error("The saved reviews response was invalid.");
+      setHistory(data.map((item: { id: number; result: Analysis }) => ({ ...item.result, saved_id: item.id })));
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Could not load saved reviews.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const deleteSavedReview = async (review: Analysis) => {
     if (!review.saved_id) {
       setMessage("This saved review has no valid database ID. Refresh and try again.");
@@ -185,7 +211,7 @@ function App() {
               </form>
               {message && <div className="notice">{message}</div>}
               {authMode === "signup" && <p className="terms">By creating an account, you agree to use CareerVue responsibly and keep your credentials secure.</p>}
-              <div className="signin-prompt">{authMode === "signup" ? <>Already have an account? <button onClick={() => { setAuthMode("login"); setMessage(""); }}>Sign in</button></> : <>New to CareerVue? <button onClick={() => { setAuthMode("signup"); setMessage(""); }}>Create an account</button></>}</div>
+              <div className="signin-prompt">{authMode === "signup" ? <>Already have an account? <button type="button" onClick={() => { setAuthMode("login"); setMessage(""); }}>Sign in</button></> : <>New to CareerVue? <button type="button" onClick={() => { setAuthMode("signup"); setMessage(""); }}>Create an account</button></>}</div>
             </section>
           </div>
         </div>
@@ -199,19 +225,20 @@ function App() {
         <div className="brand"><span className="brand-mark">CV</span> CareerVue</div>
         <span className="tagline">See your career more clearly.</span>
         <div className="auth">
-          {token ? <><button className={`nav-link ${activeView === "analyzer" ? "selected" : ""}`} onClick={() => setActiveView("analyzer")}>Resume analyzer</button><button className={`nav-link ${activeView === "linkedin" ? "selected" : ""}`} onClick={() => setActiveView("linkedin")}>LinkedIn optimizer</button><button className={`nav-link ${activeView === "history" ? "selected" : ""}`} onClick={() => { setActiveView("history"); loadHistory(); }}>Saved reviews</button><button className="ghost" onClick={() => { localStorage.removeItem("careervue_token"); setToken(""); }}>Sign out</button></> : (
+          {token ? <><button className={`nav-link ${activeView === "analyzer" ? "selected" : ""}`} onClick={() => setActiveView("analyzer")}>Resume analyzer</button><button className={`nav-link ${activeView === "linkedin" ? "selected" : ""}`} onClick={() => setActiveView("linkedin")}>LinkedIn optimizer</button><button className={`nav-link ${activeView === "history" ? "selected" : ""}`} onClick={() => { setActiveView("history"); loadHistoryFromApi(); }}>Saved reviews</button><button className="ghost" onClick={() => { localStorage.removeItem("careervue_token"); setToken(""); setAnalysis(null); setLinkedin(null); setHistory([]); setFile(null); setJobDescription(""); }}>Sign out</button></> : (
             <><button className="ghost" onClick={() => { setAuthMode("login"); setShowSignup(true); setMessage(""); }}>Sign in</button><button className="primary small" onClick={() => { setAuthMode("signup"); setShowSignup(true); setMessage(""); }}>Create account</button></>
           )}
         </div>
       </nav>
 
-      {token && activeView === "analyzer" && <>
+      {activeView === "analyzer" && <>
       <section className="hero container">
         <div className="hero-copy">
           <div className="eyebrow">RESUME AND PROFILE REVIEW</div>
           <h1>Make your next application <em>more focused.</em></h1>
           <p>Review your resume against a specific role, understand what needs attention, and prepare a stronger version of your professional profile.</p>
           <div className="proof"><Check size={17} /> Resume review · Role comparison · Profile writing</div>
+          {!token && <button className="primary hero-action" onClick={() => { setAuthMode("signup"); setShowSignup(true); }}>Start your review <ArrowRight size={18} /></button>}
         </div>
         <div className="hero-card">
           <div className="insight-preview">
@@ -224,7 +251,7 @@ function App() {
         </div>
       </section>
 
-      <section className="workspace container">
+      {token && <section className="workspace container">
         <div className="section-heading"><span>01</span><div><h2>Start with your target role</h2><p>Upload once, then get a clear action plan.</p></div></div>
         <form className="input-grid" onSubmit={analyze}>
           <label className="upload-card">
@@ -241,7 +268,7 @@ function App() {
           <button className="primary analyze" disabled={busy}>{busy ? "Analyzing..." : <>Analyze my fit <ArrowRight size={18} /></>}</button>
         </form>
         {message && <div className="notice">{message}</div>}
-      </section>
+      </section>}
 
       {analysis && <section className="results container">
         <div className="section-heading"><span>02</span><div><h2>Your CareerVue snapshot</h2><p>{analysis.filename} · {analysis.text_stats.word_count} words</p></div></div>

@@ -5,6 +5,7 @@ import hmac
 import os
 import secrets
 import sqlite3
+import threading
 import time
 from typing import Any, Dict, Optional
 
@@ -16,7 +17,10 @@ from pydantic import BaseModel, Field
 from services import analyze_resume, optimize_linkedin
 from utils.skill_matcher import initialize_skill_matcher
 
-DATABASE_PATH = os.getenv("CAREERVUE_DATABASE", "careervue.db")
+DATABASE_PATH = os.getenv(
+    "CAREERVUE_DATABASE",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "careervue.db"),
+)
 TOKEN_SECRET = os.getenv("CAREERVUE_TOKEN_SECRET", "change-this-development-secret")
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024
 
@@ -45,6 +49,7 @@ app.add_middleware(
 nlp = None
 matcher = None
 skills_db = None
+model_lock = threading.Lock()
 
 
 class RegisterRequest(BaseModel):
@@ -141,10 +146,17 @@ def current_user(authorization: Optional[str] = None) -> sqlite3.Row:
 
 @app.on_event("startup")
 async def startup_event() -> None:
-    global nlp, matcher, skills_db
-    nlp, matcher, skills_db = initialize_skill_matcher()
     db = get_db()
     db.close()
+
+
+def ensure_models() -> None:
+    global nlp, matcher, skills_db
+    if nlp is not None and matcher is not None and skills_db is not None:
+        return
+    with model_lock:
+        if nlp is None or matcher is None or skills_db is None:
+            nlp, matcher, skills_db = initialize_skill_matcher()
 
 
 @app.get("/")
@@ -201,6 +213,7 @@ async def analyze_authenticated(
     authorization: Optional[str] = Header(default=None),
 ) -> Dict[str, Any]:
     user = current_user(authorization)
+    ensure_models()
     content = await resume_file.read()
     if len(content) > MAX_UPLOAD_BYTES:
         raise HTTPException(status_code=413, detail="Resume file must be 5 MB or smaller.")
@@ -227,6 +240,7 @@ async def linkedin_endpoint(
     authorization: Optional[str] = Header(default=None),
 ) -> Dict[str, Any]:
     current_user(authorization)
+    ensure_models()
     content = await resume_file.read()
     if len(content) > MAX_UPLOAD_BYTES:
         raise HTTPException(status_code=413, detail="Resume file must be 5 MB or smaller.")
